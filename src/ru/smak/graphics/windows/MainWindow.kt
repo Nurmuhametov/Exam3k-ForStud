@@ -2,13 +2,13 @@ package ru.smak.graphics.windows
 
 import ru.smak.graphics.components.GraphicsPanel
 import ru.smak.graphics.convertation.CartesianScreenPlane
-import ru.smak.graphics.painting.CartesianPainter
-import ru.smak.graphics.painting.GridPainter
-import ru.smak.graphics.painting.PanelPointer
+import ru.smak.graphics.painting.*
 import java.awt.Dimension
+import java.lang.Math.pow
 import javax.swing.GroupLayout
 import javax.swing.JFrame
 import javax.swing.WindowConstants
+import kotlin.math.sqrt
 
 class MainWindow : JFrame("Экзамен: КТ, 3 курс") {
 
@@ -39,8 +39,8 @@ class MainWindow : JFrame("Экзамен: КТ, 3 курс") {
         val plane = CartesianScreenPlane(
             mainPanel.width,
             mainPanel.height,
-            -3.5, 3.5,
-            -3.5, 3.5
+            -4.5, 4.5,
+            -4.5, 4.5
         )
         val cartesianP = CartesianPainter(plane)
         mainPanel.addPainter(cartesianP)
@@ -53,6 +53,13 @@ class MainWindow : JFrame("Экзамен: КТ, 3 курс") {
         mainPanel.mousePressedListeners.add { e -> e?.let { pointer.set(e.point, mainPanel.graphics) } }
         mainPanel.mouseDraggedListeners.add { e -> e?.let { pointer.move(e.point, mainPanel.graphics) } }
         mainPanel.mouseReleasedListeners.add { e -> e?.let { pointer.remove(mainPanel.graphics) } }
+
+        val func = {x:Double -> sqrt(16-x*x) }
+        val pfunc: (Double)->Pair<Double, Double> = {t: Double -> Pair(pow(2.0,t-1),0.25*(t*t*t+1))}
+        val fp = FunctionPainter(plane, func)
+        val pfp = ParamFunctionPainter(plane,pfunc)
+        mainPanel.addPainter(fp)
+        mainPanel.addPainter(pfp)
     }
 
     fun makeVisible() {

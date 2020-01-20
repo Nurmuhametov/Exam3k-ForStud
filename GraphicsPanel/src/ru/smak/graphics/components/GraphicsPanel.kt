@@ -25,6 +25,7 @@ class GraphicsPanel : JPanel(), MouseListener, MouseMotionListener {
 
     init {
         background = Color.WHITE
+
         addComponentListener(object : ComponentAdapter() {
             override fun componentResized(e: ComponentEvent?) {
                 paintersCollection.forEach {
